@@ -138,21 +138,20 @@ no extra formatting.",
 
 @mcp.tool(description=ResumeToolDescription.model_dump_json())
 async def resume() -> str:
-    """
-    Return your resume exactly as markdown text
-
-    """
     try:
         resume_path = Path("Tejaswi-2025.pdf")
-
-        import fitz
-        doc = fitz.open(resume_path)
-        text = "\n".join([page.get_text() for page in doc])
-
-        markdown_resume = markdownify.markdownify(text,heading_style="ATX")
-        return markdown_resume
+        if not resume_path.exists():
+            return "<error>Resume file not found</error>"
+        with fitz.open(resume_path) as doc:
+            text = ""
+            for page in doc:
+                text += page.get_text()
+        if not text.strip():
+            return "<error>Resume is empty or couldn't be read.</error>"
+        markdown = md(text)
+        return markdown
     except Exception as e:
-        return f"<error>Failed to read resume : {e}</error>"
+        return f"<error>Error reading resume: {e}</error>"
 
 
 @mcp.tool
