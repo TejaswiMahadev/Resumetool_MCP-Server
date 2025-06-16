@@ -9,9 +9,10 @@ from openai import BaseModel
 from pydantic import AnyUrl, Field
 import readabilipy
 from pathlib import Path
+import os
 
-TOKEN = "3f48d2bdd2ff"
-MY_NUMBER = "9063231758"  # Insert your number {91}{Your number}
+TOKEN = os.getenv("TOKEN")
+MY_NUMBER = os.getenv("MY_NUMBER")  # Insert your number {91}{Your number}
 
 
 class RichToolDescription(BaseModel):
